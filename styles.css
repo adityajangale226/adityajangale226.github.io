@@ -45,12 +45,17 @@ body {
   font-family: var(--font-body);
   line-height: 1.7;
   overflow-x: hidden;
-  cursor: none;
+}
+
+/* Custom cursor only active on pointer-capable (non-touch) devices */
+@media (pointer: fine) {
+  body { cursor: none; }
+  button { cursor: none; }
 }
 
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
-button { cursor: none; border: none; outline: none; background: none; font-family: inherit; }
+button { border: none; outline: none; background: none; font-family: inherit; }
 ul { list-style: none; }
 
 /* ---------- Custom Cursor ---------- */
