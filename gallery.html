@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHRONOS APEX — Gallery · The World Through Apex Eyes</title>
+  <meta name="description" content="Explore the CHRONOS APEX gallery — luxury watch photography, lifestyle imagery, and stories from owners around the world." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ===== GALLERY PAGE ===== */
+
+    /* Gallery Hero */
+    .gallery-hero {
+      height: 70vh;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      background: var(--black);
+    }
+    .gallery-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(212,175,55,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 50%, rgba(255,68,68,0.08) 0%, transparent 50%),
+        var(--black);
+    }
+    #galleryHeroCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      opacity: 0.5;
+    }
+    .gallery-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 5%;
+    }
+    .gallery-hero-content h1 {
+      font-family: var(--font-primary);
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.1;
+    }
+    .gallery-hero-content h1 em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      position: sticky;
+      top: 80px;
+      z-index: 100;
+      background: rgba(10,14,39,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 5%;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      overflow-x: auto;
+    }
+    .filter-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .filter-btn {
+      padding: 8px 20px;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--silver);
+      white-space: nowrap;
+      transition: var(--transition-fast);
+      cursor: none;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(212,175,55,0.08);
+    }
+
+    /* Gallery Grid */
+    .gallery-section { background: var(--black); padding: 60px 5%; }
+    .gallery-grid {
+      columns: 3;
+      column-gap: 16px;
+    }
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 16px;
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: none;
+      group: true;
+    }
+    .gallery-canvas-wrap {
+      width: 100%;
+      background: var(--black-3);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+      transition: var(--transition);
+    }
+    .gallery-canvas-wrap:hover { transform: scale(1.02); border-color: rgba(212,175,55,0.4); }
+    .gallery-canvas-wrap canvas { display: block; width: 100%; }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,14,39,0.9) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+    }
+    .gallery-canvas-wrap:hover .gallery-overlay { opacity: 1; }
+    .gallery-overlay-title { font-family: var(--font-primary); font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .gallery-overlay-sub { font-size: 0.75rem; color: var(--text-muted); }
+    .gallery-expand-btn {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 36px; height: 36px;
+      background: rgba(10,14,39,0.8);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity var(--transition);
+      cursor: none;
+    }
+    .gallery-canvas-wrap:hover .gallery-expand-btn { opacity: 1; }
+
+    /* Lifestyle Grid */
+    .lifestyle-section { background: var(--black-2); padding: 80px 5%; }
+    .lifestyle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 16px;
+    }
+    .lifestyle-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: none;
+      background: var(--black-3);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .lifestyle-card:hover { transform: translateY(-6px); border-color: rgba(212,175,55,0.3); box-shadow: var(--shadow-gold); }
+    .lifestyle-card.large { grid-column: span 2; }
+    .lifestyle-card-inner {
+      position: relative;
+      height: 280px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .lifestyle-card.large .lifestyle-card-inner { height: 380px; }
+    .lifestyle-canvas { display: block; }
+    .lifestyle-caption {
+      padding: 20px;
+    }
+    .lifestyle-caption-tag { font-size: 0.7rem; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+    .lifestyle-caption-title { font-family: var(--font-primary); font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .lifestyle-caption-text { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* Lightbox */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(5,7,20,0.97);
+      backdrop-filter: blur(20px);
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    #lightbox.open { display: flex; }
+    .lightbox-inner {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    #lightboxCanvas {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      max-height: 75vh;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 24px; right: 24px;
+      width: 48px; height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--silver);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      background: var(--card-bg);
+    }
+    .lightbox-close:hover { border-color: var(--gold); color: var(--gold); }
+    .lightbox-nav {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .lightbox-nav-btn {
+      width: 48px; height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--silver);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      background: var(--card-bg);
+    }
+    .lightbox-nav-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .lightbox-info { text-align: center; }
+    .lightbox-title { font-family: var(--font-primary); font-size: 1.2rem; color: var(--white); }
+    .lightbox-sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+    .lightbox-counter { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); }
+
+    /* Testimonials Wall */
+    .testimonials-wall { background: var(--black); padding: 80px 5%; }
+    .testimonials-masonry {
+      columns: 3;
+      column-gap: 20px;
+    }
+    .testimonial-wall-card {
+      break-inside: avoid;
+      margin-bottom: 20px;
+      padding: 28px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: var(--transition);
+    }
+    .testimonial-wall-card:hover {
+      border-color: rgba(212,175,55,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .tw-stars { font-size: 0.85rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 12px; }
+    .tw-text { font-size: 0.875rem; color: var(--text-muted); line-height: 1.8; font-style: italic; margin-bottom: 16px; }
+    .tw-author { display: flex; align-items: center; gap: 10px; }
+    .tw-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dark), var(--red-dark));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; color: var(--white); flex-shrink: 0;
+    }
+    .tw-name { font-weight: 600; color: var(--white); font-size: 0.875rem; }
+    .tw-role { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+    .tw-piece { font-size: 0.7rem; color: var(--gold); margin-top: 2px; font-family: var(--font-mono); }
+
+    /* Awards & Press */
+    .awards-section { background: var(--black-3); padding: 80px 5%; }
+    .awards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .award-card {
+      padding: 32px 24px;
+      text-align: center;
+      border-radius: var(--radius);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .award-card:hover { border-color: rgba(212,175,55,0.3); transform: translateY(-6px); box-shadow: var(--shadow-gold); }
+    .award-icon { font-size: 2.2rem; color: var(--gold); margin-bottom: 16px; }
+    .award-year { font-family: var(--font-mono); font-size: 0.8rem; color: var(--red); letter-spacing: 0.15em; margin-bottom: 8px; }
+    .award-name { font-family: var(--font-primary); font-size: 1.05rem; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+    .award-body { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* Contact Sales */
+    .contact-section { background: var(--black-2); padding: 100px 5%; }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-info-block {
+      margin-bottom: 32px;
+    }
+    .contact-info-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      transition: var(--transition-fast);
+    }
+    .contact-info-item:hover { border-color: rgba(212,175,55,0.3); }
+    .contact-info-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: rgba(212,175,55,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .contact-info-label { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+    .contact-info-value { font-size: 0.9rem; color: var(--silver-light); font-weight: 500; }
+    .contact-form {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 8px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--silver-light);
+      font-size: 0.9rem;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-select option { background: var(--black-2); }
+    .form-textarea { resize: vertical; min-height: 120px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-error { font-size: 0.75rem; color: var(--red); margin-top: 4px; display: none; }
+    .form-error.show { display: block; }
+    .form-success {
+      text-align: center;
+      padding: 40px;
+      display: none;
+    }
+    .form-success.show { display: block; }
+    .form-success-icon { font-size: 3rem; color: var(--gold); margin-bottom: 16px; }
+    .form-success-title { font-family: var(--font-primary); font-size: 1.5rem; color: var(--white); margin-bottom: 8px; }
+    .form-success-text { color: var(--text-muted); font-size: 0.875rem; }
+
+    /* VIP Benefits */
+    .vip-section { background: var(--black); padding: 80px 5%; }
+    .vip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .vip-card {
+      padding: 36px 28px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, var(--black-3) 0%, var(--black-2) 100%);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .vip-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--red));
+    }
+    .vip-card:hover { border-color: rgba(212,175,55,0.3); transform: translateY(-6px); box-shadow: var(--shadow-gold); }
+    .vip-number {
+      font-family: var(--font-mono);
+      font-size: 3rem;
+      font-weight: 700;
+      color: rgba(212,175,55,0.15);
+      position: absolute;
+      top: 16px; right: 20px;
+    }
+    .vip-icon { font-size: 1.8rem; color: var(--gold); margin-bottom: 16px; }
+    .vip-title { font-family: var(--font-primary); font-size: 1.2rem; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+    .vip-desc { font-size: 0.875rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* Stats */
+    .stats-section {
+      background: linear-gradient(135deg, var(--black-3) 0%, var(--black-2) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 60px 5%;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 40px;
+      text-align: center;
+    }
+    .stat-value {
+      font-family: var(--font-primary);
+      font-size: 2.8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 1024px) {
+      .gallery-grid { columns: 2; }
+      .testimonials-masonry { columns: 2; }
+      .awards-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+      .vip-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .lifestyle-grid { grid-template-columns: 1fr 1fr; }
+      .lifestyle-card.large { grid-column: span 2; }
+    }
+    @media (max-width: 768px) {
+      .gallery-grid { columns: 1; }
+      .testimonials-masonry { columns: 1; }
+      .awards-grid { grid-template-columns: 1fr; }
+      .vip-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .lifestyle-grid { grid-template-columns: 1fr; }
+      .lifestyle-card.large { grid-column: span 1; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div id="loader">
+    <div class="loader-logo">CHRONOS APEX</div>
+    <div style="font-size:0.7rem;letter-spacing:0.3em;color:var(--text-muted);text-transform:uppercase;margin-top:8px;">Gallery</div>
+    <div class="loader-bar"><div class="loader-progress"></div></div>
+  </div>
+
+  <div id="cursor"></div>
+  <div id="cursor-follower"></div>
+  <div id="scroll-progress"></div>
+
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span class="toast-text"></span>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <button class="lightbox-close" id="lightboxClose"><i class="fas fa-times"></i></button>
+    <div class="lightbox-inner">
+      <canvas id="lightboxCanvas" width="640" height="640"></canvas>
+      <div class="lightbox-nav">
+        <button class="lightbox-nav-btn" id="lbPrev"><i class="fas fa-chevron-left"></i></button>
+        <div class="lightbox-info">
+          <div class="lightbox-title" id="lbTitle"></div>
+          <div class="lightbox-sub" id="lbSub"></div>
+        </div>
+        <button class="lightbox-nav-btn" id="lbNext"><i class="fas fa-chevron-right"></i></button>
+      </div>
+      <div class="lightbox-counter" id="lbCounter"></div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo">CHRONOS<span>·</span>APEX</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="product.html">Collection</a></li>
+      <li><a href="gallery.html" class="active">Gallery</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="product.html" class="nav-cta"><i class="fas fa-shopping-bag"></i> Buy Now</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- ===== GALLERY HERO ===== -->
+  <section class="gallery-hero">
+    <div class="gallery-hero-bg"></div>
+    <canvas id="galleryHeroCanvas"></canvas>
+    <div class="gallery-hero-content" data-aos="fade-up">
+      <span class="section-tag" style="margin-bottom:20px;">The Visual Story</span>
+      <h1>The World Through<br><em>Apex Eyes</em></h1>
+      <p style="color:var(--text-muted);margin-top:20px;max-width:560px;margin-left:auto;margin-right:auto;font-size:1rem;line-height:1.8;">
+        Every angle reveals new mastery. Every setting showcases untamed elegance.
+        Explore the Apex Chronograph as it was meant to be seen.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <div class="stats-section">
+    <div class="stats-grid">
+      <div data-aos="fade-up" data-aos-delay="0">
+        <div class="stat-value">100</div>
+        <div class="stat-label">Years of Heritage</div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="80">
+        <div class="stat-value">50</div>
+        <div class="stat-label">Pieces Made</div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="160">
+        <div class="stat-value">847</div>
+        <div class="stat-label">Components</div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="240">
+        <div class="stat-value">42</div>
+        <div class="stat-label">Service Centres</div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="320">
+        <div class="stat-value">4.9</div>
+        <div class="stat-label">Owner Rating</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FILTER BAR ===== -->
+  <div class="filter-bar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" data-filter="all">All Images</button>
+    <button class="filter-btn" data-filter="product">Product Shots</button>
+    <button class="filter-btn" data-filter="detail">Detail Close-Ups</button>
+    <button class="filter-btn" data-filter="lifestyle">Lifestyle</button>
+    <button class="filter-btn" data-filter="movement">Movement</button>
+  </div>
+
+  <!-- ===== GALLERY MASONRY ===== -->
+  <section class="gallery-section" id="gallery">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Photography</span>
+      <h2 class="section-title">Product <em>Gallery</em></h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Items injected by JS -->
+    </div>
+  </section>
+
+  <!-- ===== LIFESTYLE GRID ===== -->
+  <section class="lifestyle-section">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">In the World</span>
+      <h2 class="section-title">Apex <em>Lifestyle</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="lifestyle-grid">
+      <div class="lifestyle-card large" data-aos="fade-right">
+        <div class="lifestyle-card-inner">
+          <canvas id="ls1" width="560" height="380"></canvas>
+        </div>
+        <div class="lifestyle-caption">
+          <div class="lifestyle-caption-tag">Monaco Grand Prix</div>
+          <div class="lifestyle-caption-title">Born for Speed</div>
+          <div class="lifestyle-caption-text">The Apex Chronograph: official timing partner of the Monaco Historic Grand Prix. Precision on the wrist, precision on the track.</div>
+        </div>
+      </div>
+      <div class="lifestyle-card" data-aos="fade-left">
+        <div class="lifestyle-card-inner">
+          <canvas id="ls2" width="280" height="280"></canvas>
+        </div>
+        <div class="lifestyle-caption">
+          <div class="lifestyle-caption-tag">Private Aviation</div>
+          <div class="lifestyle-caption-title">Above the Clouds</div>
+          <div class="lifestyle-caption-text">At 40,000 feet, the GMT function earns its place.</div>
+        </div>
+      </div>
+      <div class="lifestyle-card" data-aos="fade-up">
+        <div class="lifestyle-card-inner">
+          <canvas id="ls3" width="280" height="280"></canvas>
+        </div>
+        <div class="lifestyle-caption">
+          <div class="lifestyle-caption-tag">Ocean Diving</div>
+          <div class="lifestyle-caption-title">500m Proven</div>
+          <div class="lifestyle-caption-text">500 metres below the surface — the Apex performs.</div>
+        </div>
+      </div>
+      <div class="lifestyle-card" data-aos="fade-right">
+        <div class="lifestyle-card-inner">
+          <canvas id="ls4" width="280" height="280"></canvas>
+        </div>
+        <div class="lifestyle-caption">
+          <div class="lifestyle-caption-tag">Geneva Ateliers</div>
+          <div class="lifestyle-caption-title">Handcrafted</div>
+          <div class="lifestyle-caption-text">1,200 hours of work by a single master watchmaker.</div>
+        </div>
+      </div>
+      <div class="lifestyle-card" data-aos="fade-left">
+        <div class="lifestyle-card-inner">
+          <canvas id="ls5" width="280" height="280"></canvas>
+        </div>
+        <div class="lifestyle-caption">
+          <div class="lifestyle-caption-tag">Boardroom</div>
+          <div class="lifestyle-caption-title">Command Presence</div>
+          <div class="lifestyle-caption-text">Every handshake begins with a glance at your wrist.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS WALL ===== -->
+  <section class="section testimonials-wall" id="testimonials">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Owner Stories</span>
+      <h2 class="section-title">Voices of the <em>Apex Family</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="testimonials-masonry">
+      <div class="testimonial-wall-card" data-aos="fade-up">
+        <div class="tw-stars">★★★★★</div>
+        <p class="tw-text">"Received piece No. 7 last month. The unboxing experience alone — the hand-stitched case, the personal note from the watchmaker — set the tone. The watch exceeded every expectation. I wore it 90 days straight without removing it. Not one blemish."</p>
+        <div class="tw-author">
+          <div class="tw-avatar">JH</div>
+          <div><div class="tw-name">James Hartwell</div><div class="tw-role">CEO, New York</div><div class="tw-piece">Piece No. 07 / 50</div></div>
+        </div>
+      </div>
+      <div class="testimonial-wall-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="tw-stars">★★★★★</div>
+        <p class="tw-text">"The movement visible through the caseback is the finest finishing I have seen at any price point. My 1972 Patek Ref. 2499 has good finishing. This surpasses it. The Côtes de Genève is architectural. Mesmerizing to watch wind automatically on your wrist."</p>
+        <div class="tw-author">
+          <div class="tw-avatar">AB</div>
+          <div><div class="tw-name">Alessandro Bianchi</div><div class="tw-role">Collector, Milan</div><div class="tw-piece">Piece No. 12 / 50</div></div>
+        </div>
+      </div>
+      <div class="testimonial-wall-card" data-aos="fade-up" data-aos-delay="160">
+        <div class="tw-stars">★★★★★</div>
+        <p class="tw-text">"I was skeptical about red but the photos don't do it justice. In person it's the most commanding, confident, masculine statement — yet never vulgar. The titanium case means it's lighter than my Submariner. I wear it everywhere. Boardrooms, dive sites, galas."</p>
+        <div class="tw-author">
+          <div class="tw-avatar">RK</div>
+          <div><div class="tw-name">Raj Kapoor</div><div class="tw-role">Entrepreneur, Mumbai</div><div class="tw-piece">Piece No. 31 / 50</div></div>
+        </div>
+      </div>
+      <div class="testimonial-wall-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="tw-stars">★★★★★</div>
+        <p class="tw-text">"Six months. Every day. My relationship manager proactively called to check satisfaction at 1 month, 3 months, and 6 months. No one does that. The watch is extraordinary but the entire brand experience — from first inquiry through delivery and beyond — is the differentiator."</p>
+        <div class="tw-author">
+          <div class="tw-avatar">SC</div>
+          <div><div class="tw-name">Sophia Chen</div><div class="tw-role">Entrepreneur, HK</div><div class="tw-piece">Piece No. 23 / 50</div></div>
+        </div>
+      </div>
+      <div class="testimonial-wall-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="tw-stars">★★★★★</div>
+        <p class="tw-text">"The blockchain certificate is genius. Already two offers from collectors above my purchase price and I've held it only 4 months. The provenance is immutable, the scarcity is real, and the quality is undeniable. This is how you build a true collector's piece."</p>
+        <div class="tw-author">
+          <div class="tw-avatar">EV</div>
+          <div><div class="tw-name">Elena Volkov</div><div class="tw-role">Investor, Moscow</div><div class="tw-piece">Piece No. 38 / 50</div></div>
+        </div>
+      </div>
+      <div class="testimonial-wall-card" data-aos="fade-up" data-aos-delay="160">
+        <div class="tw-stars">★★★★★</div>
+        <p class="tw-text">"Manufacture visit arranged by my Apex liaison. Four hours with Jean-Marc Bertrand — the watchmaker assembling my piece. Watching him work under the loupe, explaining each component's function and origin. I cannot describe the emotional connection to the object after that experience."</p>
+        <div class="tw-author">
+          <div class="tw-avatar">TM</div>
+          <div><div class="tw-name">Thomas Müller</div><div class="tw-role">Family Office, Zurich</div><div class="tw-piece">Piece No. 04 / 50</div></div>
+        </div>
+      </div>
+      <div class="testimonial-wall-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="tw-stars">★★★★★</div>
+        <p class="tw-text">"The flyback chronograph is a revelation. One push to reset and restart — no fumbling. I use it timing lap segments at the Nürburgring. The accuracy is almost embarrassing. My car's digital timer agrees with it to within a fraction. For a mechanical watch, this is extraordinary."</p>
+        <div class="tw-author">
+          <div class="tw-avatar">FD</div>
+          <div><div class="tw-name">François Dubois</div><div class="tw-role">Motorsport, Monaco</div><div class="tw-piece">Piece No. 01 / 50</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== AWARDS ===== -->
+  <section class="awards-section">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Recognition</span>
+      <h2 class="section-title">Globally <em>Acclaimed</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="awards-grid">
+      <div class="award-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="award-icon"><i class="fas fa-trophy"></i></div>
+        <div class="award-year">2024</div>
+        <div class="award-name">Grand Prix d'Horlogerie</div>
+        <div class="award-body">Best Sports Chronograph, Geneva. The highest honour in watchmaking, awarded by an international jury of 30 industry experts.</div>
+      </div>
+      <div class="award-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="award-icon"><i class="fas fa-medal"></i></div>
+        <div class="award-year">2024</div>
+        <div class="award-name">Watch of the Year</div>
+        <div class="award-body">Hodinkee, Revolution, WatchTime — the most prestigious watch media unanimously voted the Apex Chronograph the year's defining timepiece.</div>
+      </div>
+      <div class="award-card" data-aos="fade-up" data-aos-delay="160">
+        <div class="award-icon"><i class="fas fa-star"></i></div>
+        <div class="award-year">2024</div>
+        <div class="award-name">COSC Chronometer Gold</div>
+        <div class="award-body">Averaged 0.8 seconds per day — the finest COSC result ever recorded for a flyback chronograph movement.</div>
+      </div>
+      <div class="award-card" data-aos="fade-up" data-aos-delay="240">
+        <div class="award-icon"><i class="fas fa-gem"></i></div>
+        <div class="award-year">2024</div>
+        <div class="award-name">Geneva Seal — Exceptional</div>
+        <div class="award-body">The Geneva Seal Exceptional category — awarded for the first time in the seal's 130-year history — recognizes the CA-8 as unprecedented in quality.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== VIP BENEFITS ===== -->
+  <section class="vip-section section">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Ownership Experience</span>
+      <h2 class="section-title">The <em>Apex</em> Life</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="vip-grid">
+      <div class="vip-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="vip-number">01</div>
+        <div class="vip-icon"><i class="fas fa-user-tie"></i></div>
+        <div class="vip-title">Personal Relationship Manager</div>
+        <div class="vip-desc">Dedicated point of contact available 24/7. Expert in your specific piece's history and specifications. Your liaison to every Apex service globally.</div>
+      </div>
+      <div class="vip-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="vip-number">02</div>
+        <div class="vip-icon"><i class="fas fa-plane"></i></div>
+        <div class="vip-title">Geneva Manufacture Access</div>
+        <div class="vip-desc">Private guided tours of our historic ateliers. Meet your watchmaker. Observe assembly in progress. Annual invitation to our Owners' Evening gala.</div>
+      </div>
+      <div class="vip-card" data-aos="fade-up" data-aos-delay="160">
+        <div class="vip-number">03</div>
+        <div class="vip-icon"><i class="fas fa-tools"></i></div>
+        <div class="vip-title">Free 5-Year Service</div>
+        <div class="vip-desc">Complete movement service, case refinishing, crystal replacement, and new strap — free of charge for the first 10 years of ownership. Loaner watch provided.</div>
+      </div>
+      <div class="vip-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="vip-number">04</div>
+        <div class="vip-icon"><i class="fas fa-pen-nib"></i></div>
+        <div class="vip-title">Custom Engraving Service</div>
+        <div class="vip-desc">Caseback, clasp, or movement rotor — our master engravers can personalize any surface. From monograms to bespoke scenes, the piece becomes uniquely yours.</div>
+      </div>
+      <div class="vip-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="vip-number">05</div>
+        <div class="vip-icon"><i class="fas fa-shield-alt"></i></div>
+        <div class="vip-title">Lifetime Insurance Liaison</div>
+        <div class="vip-desc">We work directly with leading fine art insurers to arrange bespoke coverage at preferential rates. Documentation, valuations, and claims support handled by our team.</div>
+      </div>
+      <div class="vip-card" data-aos="fade-up" data-aos-delay="160">
+        <div class="vip-number">06</div>
+        <div class="vip-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="vip-title">Private Resale Facilitation</div>
+        <div class="vip-desc">When the time comes, we facilitate private sales between verified collectors at above-market rates. Our blockchain registry ensures seamless provenance transfer.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="contact-section" id="contact">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Begin Your Journey</span>
+      <h2 class="section-title">Contact <em>Sales</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="contact-layout">
+      <!-- Info -->
+      <div data-aos="fade-right">
+        <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.8;margin-bottom:32px;">
+          Our concierge team is available to answer every question about the Apex Chronograph, 
+          arrange private viewings, facilitate manufacture visits, and guide you through the 
+          acquisition of your individual, numbered piece.
+        </p>
+        <div class="contact-info-block">
+          <div class="contact-info-item">
+            <div class="contact-info-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div><div class="contact-info-label">Flagship Boutique</div><div class="contact-info-value">12 Rue du Rhône, 1204 Geneva, Switzerland</div></div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon"><i class="fas fa-phone"></i></div>
+            <div><div class="contact-info-label">Concierge Line</div><div class="contact-info-value">+41 22 000 0000 (24/7)</div></div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon"><i class="fas fa-envelope"></i></div>
+            <div><div class="contact-info-label">Email</div><div class="contact-info-value">concierge@chronosapex.com</div></div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon"><i class="fas fa-video"></i></div>
+            <div><div class="contact-info-label">Virtual Consultation</div><div class="contact-info-value">Video appointments available on request</div></div>
+          </div>
+        </div>
+        <div style="margin-top:32px;">
+          <div class="footer-heading" style="margin-bottom:16px;">Connect With Us</div>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-x-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div data-aos="fade-left">
+        <div class="contact-form">
+          <div id="contactFormWrap">
+            <div class="section-header" style="text-align:left;margin-bottom:28px;">
+              <h3 style="font-family:var(--font-primary);font-size:1.5rem;color:var(--white);">Request a Private Consultation</h3>
+            </div>
+            <form id="contactForm" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">First Name *</label>
+                  <input type="text" class="form-input" id="firstName" placeholder="Jean-Pierre" />
+                  <div class="form-error" id="firstNameErr">Please enter your first name.</div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Last Name *</label>
+                  <input type="text" class="form-input" id="lastName" placeholder="Dubois" />
+                  <div class="form-error" id="lastNameErr">Please enter your last name.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address *</label>
+                <input type="email" class="form-input" id="contactEmail" placeholder="contact@example.com" />
+                <div class="form-error" id="emailErr">Please enter a valid email address.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone (Optional)</label>
+                <input type="tel" class="form-input" placeholder="+1 (555) 000-0000" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Inquiry Type *</label>
+                <select class="form-select" id="inquiryType">
+                  <option value="">Select inquiry type...</option>
+                  <option value="purchase">Purchase Inquiry</option>
+                  <option value="viewing">Private Viewing</option>
+                  <option value="manufacture">Manufacture Visit</option>
+                  <option value="service">After-Sales Service</option>
+                  <option value="customisation">Custom Engraving</option>
+                  <option value="press">Press & Media</option>
+                  <option value="other">Other</option>
+                </select>
+                <div class="form-error" id="inquiryErr">Please select an inquiry type.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Message *</label>
+                <textarea class="form-textarea" id="message" placeholder="Tell us about your interest in the Apex Chronograph..."></textarea>
+                <div class="form-error" id="messageErr">Please include a message.</div>
+              </div>
+              <div class="form-group" style="display:flex;align-items:flex-start;gap:12px;">
+                <input type="checkbox" id="privacyCheck" style="margin-top:3px;accent-color:var(--gold);" />
+                <label for="privacyCheck" style="font-size:0.8rem;color:var(--text-muted);cursor:pointer;">
+                  I agree to the <a href="#" style="color:var(--gold);">Privacy Policy</a> and consent to being contacted by Chronos Apex SA.
+                </label>
+              </div>
+              <div class="form-error" id="privacyErr">Please accept the privacy policy.</div>
+              <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">
+                <i class="fas fa-paper-plane"></i> Send Inquiry
+              </button>
+            </form>
+          </div>
+          <div class="form-success" id="formSuccess">
+            <div class="form-success-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="form-success-title">Thank You</div>
+            <p class="form-success-text">Your inquiry has been received. A member of our concierge team will contact you within 2 business hours to discuss your interests personally.</p>
+            <button class="btn btn-secondary" style="margin-top:24px;" onclick="resetForm()">Send Another Inquiry</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div data-aos="fade-up">
+        <div class="footer-brand-logo">CHRONOS APEX</div>
+        <p class="footer-brand-desc">Since 1924, crafting extraordinary timepieces in Geneva. A century of passion, precision, and uncompromising excellence in every piece.</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-x-twitter"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="100">
+        <div class="footer-heading">Navigation</div>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="product.html">Collection</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+          <li><a href="#contact">Contact Sales</a></li>
+        </ul>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="200">
+        <div class="footer-heading">Services</div>
+        <ul class="footer-links">
+          <li><a href="#">After-Sales</a></li>
+          <li><a href="#">Authentication</a></li>
+          <li><a href="#">Engraving</a></li>
+          <li><a href="#">VIP Concierge</a></li>
+          <li><a href="#">Manufacture Visits</a></li>
+        </ul>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="300">
+        <div class="footer-heading">Contact</div>
+        <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>12 Rue du Rhône, Geneva</span></div>
+        <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+41 22 000 0000</span></div>
+        <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>concierge@chronosapex.com</span></div>
+        <div class="footer-heading" style="margin-top:24px;">Newsletter</div>
+        <form class="footer-newsletter-form" id="footerNewsletter">
+          <input type="email" placeholder="Your email" />
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">© 2024 <span>Chronos Apex SA</span>. All rights reserved.</div>
+      <div class="footer-payments">
+        <i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i>
+        <i class="fab fa-cc-amex"></i><i class="fab fa-cc-paypal"></i><i class="fab fa-bitcoin"></i>
+      </div>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a><a href="#">Terms</a><a href="#">Cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.min.js"></script>
+
+  <script>
+    'use strict';
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+        AOS.init({ duration: 900, once: true, offset: 80 });
+        buildGallery();
+        buildLifestyle();
+        initHeroCanvas();
+      }, 2000);
+    });
+
+    // ===== CURSOR =====
+    const cursor = document.getElementById('cursor');
+    const follower = document.getElementById('cursor-follower');
+    let mx=0,my=0,fx=0,fy=0;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+    (function a(){fx+=(mx-fx)*0.12;fy+=(my-fy)*0.12;if(cursor){cursor.style.left=mx+'px';cursor.style.top=my+'px';}if(follower){follower.style.left=fx+'px';follower.style.top=fy+'px';}requestAnimationFrame(a);})();
+
+    // ===== SCROLL =====
+    window.addEventListener('scroll', () => {
+      const p=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+      document.getElementById('scroll-progress').style.width=p+'%';
+      document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);
+    });
+    document.getElementById('navToggle').addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
+
+    // ===== TOAST =====
+    function showToast(msg){
+      const t=document.getElementById('toast');
+      t.querySelector('.toast-text').textContent=msg;
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'),3500);
+    }
+
+    // ===== GALLERY DATA =====
+    const galleryItems = [
+      { title:'Three-Quarter Hero', sub:'Studio · Low-key', filter:'product', w:400, h:480, dialColor:0x04060f, strapColor:0xcc1111 },
+      { title:'Dial Close-Up', sub:'Macro · Movement visible', filter:'detail', w:400, h:300, dialColor:0x050810, strapColor:0xcc1111 },
+      { title:'Exhibition Caseback', sub:'Movement · CA-8 calibre', filter:'movement', w:400, h:400, dialColor:0x0a1020, strapColor:0x444 },
+      { title:'Wrist Shot — Pilot', sub:'Lifestyle · Aviation', filter:'lifestyle', w:400, h:360, dialColor:0x04060f, strapColor:0x1a3a6a },
+      { title:'Overhead Flat Lay', sub:'Studio · White background', filter:'product', w:400, h:280, dialColor:0x04060f, strapColor:0xcc1111 },
+      { title:'Bezel Detail', sub:'Macro · Titanium finish', filter:'detail', w:400, h:350, dialColor:0x08101e, strapColor:0xcc1111 },
+      { title:'Night Photography', sub:'Lifestyle · Luminova glow', filter:'lifestyle', w:400, h:420, dialColor:0x020408, strapColor:0xcc1111 },
+      { title:'Chronograph Subdials', sub:'Macro · Dial details', filter:'detail', w:400, h:300, dialColor:0x060a14, strapColor:0xcc1111 },
+      { title:'GMT Hand Detail', sub:'Macro · Red GMT hand', filter:'detail', w:400, h:360, dialColor:0x04060f, strapColor:0xcc1111 },
+    ];
+
+    let currentLbIndex = 0;
+    let galleryRenderers = [];
+
+    function buildGallery(){
+      const grid = document.getElementById('galleryGrid');
+      grid.innerHTML = '';
+      galleryItems.forEach((item, i) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'gallery-item';
+        wrap.dataset.filter = item.filter;
+        wrap.setAttribute('data-aos','fade-up');
+        wrap.setAttribute('data-aos-delay', String((i%3)*80));
+        wrap.innerHTML = `
+          <div class="gallery-canvas-wrap" data-idx="${i}">
+            <canvas id="gc${i}" width="${item.w}" height="${item.h}" style="display:block;width:100%;height:auto;"></canvas>
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-title">${item.title}</div>
+              <div class="gallery-overlay-sub">${item.sub}</div>
+            </div>
+            <div class="gallery-expand-btn"><i class="fas fa-expand"></i></div>
+          </div>
+        `;
+        grid.appendChild(wrap);
+        // Render mini watch
+        setTimeout(()=>{ renderGalleryWatch(i, item); }, i*80);
+      });
+      // Lightbox click
+      grid.addEventListener('click', e=>{
+        const wrap = e.target.closest('[data-idx]');
+        if(wrap){ openLightbox(parseInt(wrap.dataset.idx)); }
+      });
+    }
+
+    function renderGalleryWatch(idx, item){
+      const canvas = document.getElementById('gc'+idx);
+      if(!canvas||!window.THREE) return;
+      canvas.width = item.w; canvas.height = item.h;
+      const renderer = new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+      renderer.setSize(item.w, item.h);
+      galleryRenderers[idx]=renderer;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, item.w/item.h, 0.1, 100);
+      camera.position.set(0,1.2,5);
+      camera.lookAt(0,0,0);
+
+      scene.add(new THREE.AmbientLight(0xffffff,0.45));
+      const l1=new THREE.PointLight(0xd4af37,3,20); l1.position.set(3,4,3); scene.add(l1);
+      const l2=new THREE.PointLight(0xff4444,1.5,15); l2.position.set(-3,-2,2); scene.add(l2);
+      const l3=new THREE.DirectionalLight(0xffffff,1.2); l3.position.set(0,6,4); scene.add(l3);
+
+      const wg=new THREE.Group(); scene.add(wg);
+      const cm=new THREE.MeshStandardMaterial({color:0x8898a8,metalness:0.95,roughness:0.12});
+      wg.add(new THREE.Mesh(new THREE.CylinderGeometry(1.1,1.1,0.28,64),cm));
+      const bz=new THREE.Mesh(new THREE.TorusGeometry(1.08,0.09,12,64),new THREE.MeshStandardMaterial({color:0x9ab0c0,metalness:0.97,roughness:0.1}));
+      bz.rotation.x=Math.PI/2; bz.position.y=0.14; wg.add(bz);
+      const d=new THREE.Mesh(new THREE.CylinderGeometry(1.0,1.0,0.04,64),new THREE.MeshStandardMaterial({color:item.dialColor,metalness:0.3,roughness:0.8}));
+      d.position.y=0.16; wg.add(d);
+      for(let k=0;k<12;k++){
+        const a=(k/12)*Math.PI*2;
+        const ind=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.03,0.18),new THREE.MeshStandardMaterial({color:0xd4af37,metalness:0.9,roughness:0.1,emissive:0xd4af37,emissiveIntensity:0.4}));
+        ind.position.set(Math.sin(a)*0.82,0.19,Math.cos(a)*0.82); wg.add(ind);
+      }
+      const hm=new THREE.MeshStandardMaterial({color:0xd4af37,metalness:0.9,roughness:0.1});
+      const hh=new THREE.Mesh(new THREE.BoxGeometry(0.045,0.03,0.52),hm); hh.position.y=0.2; hh.position.z=-0.1; wg.add(hh);
+      const mh=new THREE.Mesh(new THREE.BoxGeometry(0.03,0.03,0.72),hm); mh.position.y=0.21; mh.position.z=-0.15; wg.add(mh);
+      const sh=new THREE.Mesh(new THREE.BoxGeometry(0.018,0.03,0.78),new THREE.MeshStandardMaterial({color:0xff4444,metalness:0.8,roughness:0.2,emissive:0xff4444,emissiveIntensity:0.5})); sh.position.y=0.22; wg.add(sh);
+      const sm=new THREE.MeshStandardMaterial({color:item.strapColor,roughness:0.65,metalness:0.05});
+      const s1=new THREE.Mesh(new THREE.BoxGeometry(0.72,0.12,1.2),sm); s1.position.set(0,-0.02,1.55); wg.add(s1);
+      const s2=new THREE.Mesh(new THREE.BoxGeometry(0.72,0.12,1.2),sm); s2.position.set(0,-0.02,-1.55); wg.add(s2);
+
+      const baseAngle = (idx/galleryItems.length)*Math.PI*2;
+      wg.rotation.x=0.3+Math.sin(idx*0.8)*0.3;
+      wg.rotation.y=baseAngle;
+
+      let t=0;
+      const speed=0.005+Math.random()*0.005;
+      (function animate(){
+        requestAnimationFrame(animate);
+        t+=speed;
+        const now=new Date();
+        const s=now.getSeconds()+now.getMilliseconds()/1000;
+        const m=now.getMinutes()+s/60;
+        const h=(now.getHours()%12)+m/60;
+        sh.rotation.y=-(s/60)*Math.PI*2;
+        mh.rotation.y=-(m/60)*Math.PI*2;
+        hh.rotation.y=-(h/12)*Math.PI*2;
+        wg.rotation.y+=speed;
+        l1.position.x=Math.sin(t)*4; l1.position.z=Math.cos(t)*4;
+        renderer.render(scene,camera);
+      })();
+    }
+
+    // ===== LIGHTBOX =====
+    const lbCanvas = document.getElementById('lightboxCanvas');
+    let lbRenderer=null, lbScene=null, lbCamera=null, lbWatch=null, lbAF=null;
+
+    function openLightbox(idx){
+      currentLbIndex=idx;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow='hidden';
+      renderLightboxWatch(idx);
+      updateLbInfo(idx);
+    }
+    function closeLightbox(){
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow='';
+      if(lbAF){ cancelAnimationFrame(lbAF); lbAF=null; }
+    }
+    function updateLbInfo(idx){
+      const item=galleryItems[idx];
+      document.getElementById('lbTitle').textContent=item.title;
+      document.getElementById('lbSub').textContent=item.sub;
+      document.getElementById('lbCounter').textContent=(idx+1)+' / '+galleryItems.length;
+    }
+    function renderLightboxWatch(idx){
+      if(lbAF){ cancelAnimationFrame(lbAF); lbAF=null; }
+      const item=galleryItems[idx];
+      if(!window.THREE) return;
+      if(!lbRenderer){
+        lbRenderer=new THREE.WebGLRenderer({canvas:lbCanvas,alpha:true,antialias:true});
+        lbRenderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+        lbRenderer.setSize(640,640);
+      }
+      const scene=new THREE.Scene();
+      const camera=new THREE.PerspectiveCamera(40,1,0.1,100);
+      camera.position.set(0,1.2,5.5); camera.lookAt(0,0,0);
+      scene.add(new THREE.AmbientLight(0xffffff,0.5));
+      const l1=new THREE.PointLight(0xd4af37,4,25); l1.position.set(4,4,4); scene.add(l1);
+      const l2=new THREE.PointLight(0xff4444,2,18); l2.position.set(-4,-2,3); scene.add(l2);
+      scene.add(new THREE.DirectionalLight(0xffffff,1.5)).position.set(0,8,5);
+      const wg=new THREE.Group(); scene.add(wg);
+      const cm=new THREE.MeshStandardMaterial({color:0x8898a8,metalness:0.95,roughness:0.12});
+      wg.add(new THREE.Mesh(new THREE.CylinderGeometry(1.1,1.1,0.28,64),cm));
+      const bz=new THREE.Mesh(new THREE.TorusGeometry(1.08,0.09,12,64),new THREE.MeshStandardMaterial({color:0x9ab0c0,metalness:0.97,roughness:0.1}));
+      bz.rotation.x=Math.PI/2; bz.position.y=0.14; wg.add(bz);
+      const d=new THREE.Mesh(new THREE.CylinderGeometry(1.0,1.0,0.04,64),new THREE.MeshStandardMaterial({color:item.dialColor,metalness:0.3,roughness:0.8}));
+      d.position.y=0.16; wg.add(d);
+      for(let k=0;k<12;k++){const a=(k/12)*Math.PI*2;const ind=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.03,0.18),new THREE.MeshStandardMaterial({color:0xd4af37,metalness:0.9,roughness:0.1,emissive:0xd4af37,emissiveIntensity:0.5}));ind.position.set(Math.sin(a)*0.82,0.19,Math.cos(a)*0.82);wg.add(ind);}
+      const hm=new THREE.MeshStandardMaterial({color:0xd4af37,metalness:0.9,roughness:0.1});
+      const hh=new THREE.Mesh(new THREE.BoxGeometry(0.045,0.03,0.52),hm); hh.position.y=0.2; hh.position.z=-0.1; wg.add(hh);
+      const mh=new THREE.Mesh(new THREE.BoxGeometry(0.03,0.03,0.72),hm); mh.position.y=0.21; mh.position.z=-0.15; wg.add(mh);
+      const sh=new THREE.Mesh(new THREE.BoxGeometry(0.018,0.03,0.78),new THREE.MeshStandardMaterial({color:0xff4444,metalness:0.8,roughness:0.2,emissive:0xff4444,emissiveIntensity:0.5})); sh.position.y=0.22; wg.add(sh);
+      const sm=new THREE.MeshStandardMaterial({color:item.strapColor,roughness:0.65,metalness:0.05});
+      const s1=new THREE.Mesh(new THREE.BoxGeometry(0.72,0.12,1.2),sm); s1.position.set(0,-0.02,1.55); wg.add(s1);
+      const s2=new THREE.Mesh(new THREE.BoxGeometry(0.72,0.12,1.2),sm); s2.position.set(0,-0.02,-1.55); wg.add(s2);
+      wg.rotation.x=0.3; wg.rotation.y=idx*0.7;
+      let t=0;
+      function go(){
+        lbAF=requestAnimationFrame(go);
+        t+=0.008;
+        const now=new Date();
+        const s=now.getSeconds()+now.getMilliseconds()/1000;
+        const m=now.getMinutes()+s/60;
+        const h=(now.getHours()%12)+m/60;
+        sh.rotation.y=-(s/60)*Math.PI*2;
+        mh.rotation.y=-(m/60)*Math.PI*2;
+        hh.rotation.y=-(h/12)*Math.PI*2;
+        wg.rotation.y+=0.008;
+        l1.position.x=Math.sin(t)*5; l1.position.z=Math.cos(t)*5;
+        lbRenderer.render(scene,camera);
+      }
+      go();
+    }
+    document.getElementById('lightboxClose').addEventListener('click',closeLightbox);
+    document.getElementById('lightbox').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeLightbox(); });
+    document.getElementById('lbPrev').addEventListener('click',()=>{ currentLbIndex=(currentLbIndex-1+galleryItems.length)%galleryItems.length; renderLightboxWatch(currentLbIndex); updateLbInfo(currentLbIndex); });
+    document.getElementById('lbNext').addEventListener('click',()=>{ currentLbIndex=(currentLbIndex+1)%galleryItems.length; renderLightboxWatch(currentLbIndex); updateLbInfo(currentLbIndex); });
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); if(e.key==='ArrowLeft') document.getElementById('lbPrev').click(); if(e.key==='ArrowRight') document.getElementById('lbNext').click(); });
+
+    // ===== FILTER =====
+    document.querySelectorAll('.filter-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const f=btn.dataset.filter;
+        document.querySelectorAll('.gallery-item').forEach(item=>{
+          item.style.display=(f==='all'||item.dataset.filter===f)?'block':'none';
+        });
+      });
+    });
+
+    // ===== LIFESTYLE WATCHES =====
+    function buildLifestyle(){
+      const configs=[
+        {id:'ls1',w:560,h:380,sc:0xcc1111,dc:0x04060f,rx:0.2,ry:0.3},
+        {id:'ls2',w:280,h:280,sc:0x1a3a6a,dc:0x030810,rx:0.4,ry:0.6},
+        {id:'ls3',w:280,h:280,sc:0x111144,dc:0x02040c,rx:0.5,ry:1.2},
+        {id:'ls4',w:280,h:280,sc:0x888888,dc:0x080c18,rx:0.1,ry:0.0},
+        {id:'ls5',w:280,h:280,sc:0x1a1a1a,dc:0x04060f,rx:0.3,ry:1.8},
+      ];
+      configs.forEach(cfg=>{
+        const c=document.getElementById(cfg.id);
+        if(!c||!window.THREE) return;
+        c.width=cfg.w; c.height=cfg.h;
+        const renderer=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});
+        renderer.setSize(cfg.w,cfg.h);
+        const scene=new THREE.Scene();
+        const camera=new THREE.PerspectiveCamera(45,cfg.w/cfg.h,0.1,100);
+        camera.position.set(0,1.5,5.5); camera.lookAt(0,0,0);
+        scene.add(new THREE.AmbientLight(0xffffff,0.5));
+        const l1=new THREE.PointLight(0xd4af37,3,20); l1.position.set(3,3,3); scene.add(l1);
+        scene.add(new THREE.PointLight(0xff4444,1.5,15)).position.set(-3,-2,2);
+        const wg=new THREE.Group(); scene.add(wg);
+        const cm=new THREE.MeshStandardMaterial({color:0x8898a8,metalness:0.95,roughness:0.12});
+        wg.add(new THREE.Mesh(new THREE.CylinderGeometry(1.1,1.1,0.28,64),cm));
+        const bz=new THREE.Mesh(new THREE.TorusGeometry(1.08,0.09,12,64),new THREE.MeshStandardMaterial({color:0x9ab0c0,metalness:0.97,roughness:0.1}));
+        bz.rotation.x=Math.PI/2; bz.position.y=0.14; wg.add(bz);
+        const d=new THREE.Mesh(new THREE.CylinderGeometry(1.0,1.0,0.04,64),new THREE.MeshStandardMaterial({color:cfg.dc,metalness:0.3,roughness:0.8})); d.position.y=0.16; wg.add(d);
+        for(let k=0;k<12;k++){const a=(k/12)*Math.PI*2;const ind=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.03,0.18),new THREE.MeshStandardMaterial({color:0xd4af37,metalness:0.9,roughness:0.1,emissive:0xd4af37,emissiveIntensity:0.4}));ind.position.set(Math.sin(a)*0.82,0.19,Math.cos(a)*0.82);wg.add(ind);}
+        const hm=new THREE.MeshStandardMaterial({color:0xd4af37,metalness:0.9,roughness:0.1});
+        const hh=new THREE.Mesh(new THREE.BoxGeometry(0.045,0.03,0.52),hm); hh.position.y=0.2; hh.position.z=-0.1; wg.add(hh);
+        const mh=new THREE.Mesh(new THREE.BoxGeometry(0.03,0.03,0.72),hm); mh.position.y=0.21; mh.position.z=-0.15; wg.add(mh);
+        const sh=new THREE.Mesh(new THREE.BoxGeometry(0.018,0.03,0.78),new THREE.MeshStandardMaterial({color:0xff4444,metalness:0.8,roughness:0.2,emissive:0xff4444,emissiveIntensity:0.5})); sh.position.y=0.22; wg.add(sh);
+        const sm2=new THREE.MeshStandardMaterial({color:cfg.sc,roughness:0.65,metalness:0.05});
+        const s1=new THREE.Mesh(new THREE.BoxGeometry(0.72,0.12,1.2),sm2); s1.position.set(0,-0.02,1.55); wg.add(s1);
+        const s2=new THREE.Mesh(new THREE.BoxGeometry(0.72,0.12,1.2),sm2); s2.position.set(0,-0.02,-1.55); wg.add(s2);
+        wg.rotation.x=cfg.rx; wg.rotation.y=cfg.ry;
+        let t=0;
+        (function go(){
+          requestAnimationFrame(go); t+=0.007;
+          const now=new Date();
+          const s=now.getSeconds()+now.getMilliseconds()/1000,m=now.getMinutes()+s/60,h=(now.getHours()%12)+m/60;
+          sh.rotation.y=-(s/60)*Math.PI*2; mh.rotation.y=-(m/60)*Math.PI*2; hh.rotation.y=-(h/12)*Math.PI*2;
+          wg.rotation.y+=0.007; l1.position.x=Math.sin(t)*4; l1.position.z=Math.cos(t)*4;
+          renderer.render(scene,camera);
+        })();
+      });
+    }
+
+    // ===== HERO CANVAS =====
+    function initHeroCanvas(){
+      const canvas=document.getElementById('galleryHeroCanvas');
+      if(!canvas||!window.THREE) return;
+      const w=canvas.offsetWidth||window.innerWidth;
+      const h=canvas.offsetHeight||window.innerHeight*0.7;
+      canvas.width=w; canvas.height=h;
+      const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+      renderer.setSize(w,h);
+      const scene=new THREE.Scene();
+      const camera=new THREE.PerspectiveCamera(60,w/h,0.1,200);
+      camera.position.set(0,0,8);
+      scene.add(new THREE.AmbientLight(0xffffff,0.3));
+      const pl=new THREE.PointLight(0xd4af37,2,30); pl.position.set(5,5,5); scene.add(pl);
+      // Floating particles / watch rings
+      const geo=new THREE.TorusGeometry(3,0.03,8,64);
+      const mat=new THREE.MeshStandardMaterial({color:0xd4af37,metalness:0.9,roughness:0.1,transparent:true,opacity:0.3});
+      const rings=[];
+      for(let i=0;i<5;i++){
+        const r=new THREE.Mesh(geo,mat.clone());
+        r.rotation.x=Math.random()*Math.PI;
+        r.rotation.y=Math.random()*Math.PI;
+        r.scale.setScalar(0.3+i*0.3);
+        r.material.opacity=0.1+i*0.05;
+        scene.add(r); rings.push(r);
+      }
+      let t=0;
+      (function go(){requestAnimationFrame(go);t+=0.005;rings.forEach((r,i)=>{r.rotation.x+=0.003+i*0.002;r.rotation.y+=0.004+i*0.002;});pl.position.x=Math.sin(t)*8;pl.position.z=Math.cos(t)*8;renderer.render(scene,camera);})();
+    }
+
+    // ===== CONTACT FORM =====
+    document.getElementById('contactForm')?.addEventListener('submit', e=>{
+      e.preventDefault();
+      let valid=true;
+      function check(id,errId,fn){const v=document.getElementById(id)?.value.trim();const ok=fn(v);document.getElementById(errId).classList.toggle('show',!ok);if(!ok) valid=false;}
+      check('firstName','firstNameErr',v=>v.length>0);
+      check('lastName','lastNameErr',v=>v.length>0);
+      check('contactEmail','emailErr',v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+      check('inquiryType','inquiryErr',v=>v.length>0);
+      check('message','messageErr',v=>v.length>10);
+      const pc=document.getElementById('privacyCheck');
+      document.getElementById('privacyErr').classList.toggle('show',!pc.checked);
+      if(!pc.checked) valid=false;
+      if(valid){
+        document.getElementById('contactFormWrap').style.display='none';
+        document.getElementById('formSuccess').classList.add('show');
+        showToast('Inquiry sent! We\'ll contact you within 2 hours.');
+      }
+    });
+    function resetForm(){
+      document.getElementById('contactForm').reset();
+      document.getElementById('contactFormWrap').style.display='block';
+      document.getElementById('formSuccess').classList.remove('show');
+    }
+
+    // ===== FOOTER =====
+    document.getElementById('footerNewsletter')?.addEventListener('submit',e=>{e.preventDefault();showToast('Thank you for subscribing!');e.target.reset();});
+  </script>
+</body>
+</html>
