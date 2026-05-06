@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHRONOS APEX — Ultra-Luxury Sports Chronograph</title>
+  <meta name="description" content="CHRONOS APEX — The pinnacle of horology. Titanium case, red rubber strap, precision movement. Own a masterpiece worth $100,000+." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- AOS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+  <!-- Shared Styles -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ===== HOME PAGE SPECIFIC ===== */
+
+    /* Hero */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: var(--black);
+    }
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 60% 50%, rgba(212,175,55,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(255,68,68,0.06) 0%, transparent 50%);
+      z-index: 3;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 4;
+      padding: 0 5%;
+      max-width: 700px;
+      padding-top: 100px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: rgba(212,175,55,0.1);
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+    .hero-badge i { font-size: 0.7rem; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+    .hero-title {
+      font-family: var(--font-primary);
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .hero-title .accent {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
+    }
+    .hero-title .red { -webkit-text-fill-color: var(--red); }
+    .hero-subtitle {
+      font-family: var(--font-primary);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--silver);
+      margin-bottom: 24px;
+    }
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 40px;
+      max-width: 540px;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat-value {
+      font-family: var(--font-primary);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .hero-stat-value span { color: var(--gold); }
+    .hero-stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .hero-3d-container {
+      position: absolute;
+      right: 0; top: 0;
+      width: 55%;
+      height: 100%;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .hero-3d-container canvas { pointer-events: all; }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .scroll-mouse {
+      width: 24px; height: 38px;
+      border: 2px solid rgba(212,175,55,0.4);
+      border-radius: 12px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 6px;
+    }
+    .scroll-wheel {
+      width: 3px; height: 8px;
+      background: var(--gold);
+      border-radius: 3px;
+      animation: scrollWheel 2s ease infinite;
+    }
+    @keyframes scrollWheel { 0%{transform:translateY(0);opacity:1} 100%{transform:translateY(12px);opacity:0} }
+
+    /* Features */
+    .features { background: var(--black-2); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    .feature-card {
+      padding: 40px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center top, rgba(212,175,55,0.06) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 70px; height: 70px;
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 1.5rem;
+      color: var(--gold);
+      background: rgba(212,175,55,0.08);
+      transition: var(--transition);
+    }
+    .feature-card:hover .feature-icon {
+      background: rgba(212,175,55,0.15);
+      border-color: var(--gold);
+      transform: scale(1.1);
+      box-shadow: var(--shadow-gold);
+    }
+    .feature-title {
+      font-family: var(--font-primary);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .feature-text {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* Materials */
+    .materials { background: var(--black); position: relative; overflow: hidden; }
+    .materials::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      pointer-events: none;
+    }
+    .materials-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .materials-watch {
+      position: relative;
+      height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #materials-canvas { border-radius: var(--radius-lg); }
+    .materials-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .material-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 24px;
+      border-radius: var(--radius);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .material-item:hover {
+      border-color: rgba(212,175,55,0.3);
+      transform: translateX(8px);
+    }
+    .material-icon {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .material-icon.gold-bg { background: rgba(212,175,55,0.15); color: var(--gold); }
+    .material-icon.red-bg  { background: rgba(255,68,68,0.15); color: var(--red); }
+    .material-icon.silver-bg { background: rgba(192,192,192,0.15); color: var(--silver); }
+    .material-name {
+      font-family: var(--font-primary);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .material-desc { font-size: 0.85rem; color: var(--text-muted); }
+
+    /* Specs strip */
+    .specs-strip {
+      background: linear-gradient(90deg, var(--black-3), var(--black-2), var(--black-3));
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 60px 5%;
+      overflow: hidden;
+    }
+    .specs-scroll-track {
+      display: flex;
+      gap: 60px;
+      animation: scrollTrack 20s linear infinite;
+      white-space: nowrap;
+    }
+    .specs-scroll-track:hover { animation-play-state: paused; }
+    @keyframes scrollTrack { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .spec-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      flex-shrink: 0;
+    }
+    .spec-pill i { color: var(--gold); }
+    .spec-pill span { font-size: 0.85rem; font-weight: 500; color: var(--silver); white-space: nowrap; }
+
+    /* Parallax Banner */
+    .parallax-banner {
+      position: relative;
+      height: 60vh;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--black);
+    }
+    .parallax-bg {
+      position: absolute;
+      inset: -40px;
+      background: radial-gradient(ellipse at center, rgba(212,175,55,0.12) 0%, rgba(255,68,68,0.08) 40%, transparent 70%),
+                  var(--black);
+    }
+    .parallax-rings {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .p-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(212,175,55,0.15);
+      animation: ringPulse 4s ease-in-out infinite;
+    }
+    .p-ring:nth-child(1) { width:200px;height:200px; animation-delay:0s; }
+    .p-ring:nth-child(2) { width:350px;height:350px; animation-delay:0.5s; }
+    .p-ring:nth-child(3) { width:500px;height:500px; animation-delay:1s; }
+    .p-ring:nth-child(4) { width:650px;height:650px; animation-delay:1.5s; }
+    @keyframes ringPulse { 0%,100%{opacity:0.15;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.03)} }
+    .parallax-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    .parallax-price-tag {
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .parallax-price {
+      font-family: var(--font-primary);
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
+    }
+    .parallax-tagline {
+      font-size: 1rem;
+      color: var(--silver);
+      margin-top: 12px;
+      letter-spacing: 0.08em;
+    }
+    .parallax-cta { margin-top: 32px; }
+
+    /* Timeline / Heritage */
+    .heritage { background: var(--black-3); }
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 60px;
+      align-items: center;
+    }
+    .timeline-item:nth-child(odd) { flex-direction: row-reverse; }
+    .timeline-content {
+      flex: 1;
+      padding: 28px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: var(--transition);
+    }
+    .timeline-content:hover { border-color: rgba(212,175,55,0.3); transform: scale(1.02); }
+    .timeline-year {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .timeline-event {
+      font-family: var(--font-primary);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .timeline-desc { font-size: 0.875rem; color: var(--text-muted); }
+    .timeline-dot {
+      width: 16px; height: 16px;
+      background: var(--gold);
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 16px rgba(212,175,55,0.5);
+      z-index: 1;
+    }
+    .timeline-spacer { flex: 1; }
+
+    /* Newsletter */
+    .newsletter {
+      background: linear-gradient(135deg, var(--black-2) 0%, var(--black-3) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .newsletter-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .newsletter-form {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .newsletter-input {
+      flex: 1;
+      padding: 16px 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      color: var(--silver-light);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+    .newsletter-input:focus { border-color: var(--gold); }
+    .newsletter-disclaimer {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+    .newsletter-disclaimer a { color: var(--gold); }
+
+    /* Testimonials strip */
+    .testimonials-strip { background: var(--black); }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testimonial-card {
+      padding: 32px;
+    }
+    .testimonial-quote {
+      font-size: 2.5rem;
+      color: var(--gold);
+      font-family: var(--font-primary);
+      line-height: 1;
+      margin-bottom: 16px;
+      opacity: 0.6;
+    }
+    .testimonial-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .testimonial-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dark), var(--red));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .testimonial-name {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--white);
+    }
+    .testimonial-role { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .materials-layout { grid-template-columns: 1fr; }
+      .materials-watch { height: 400px; }
+      .hero-3d-container { width: 50%; opacity: 0.6; }
+      .timeline::before { left: 20px; }
+      .timeline-item, .timeline-item:nth-child(odd) { flex-direction: column; padding-left: 50px; }
+      .timeline-dot { position: absolute; left: 12px; }
+      .timeline-item { position: relative; }
+      .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .hero-3d-container { display: none; }
+      .hero-stats { gap: 24px; flex-wrap: wrap; }
+      .newsletter-form { flex-direction: column; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div id="loader">
+    <div class="loader-logo">CHRONOS APEX</div>
+    <div style="font-size:0.7rem;letter-spacing:0.3em;color:var(--text-muted);text-transform:uppercase;margin-top:8px;">Est. 1924 · Geneva</div>
+    <div class="loader-bar"><div class="loader-progress"></div></div>
+  </div>
+
+  <!-- Custom Cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-follower"></div>
+
+  <!-- Scroll Progress -->
+  <div id="scroll-progress"></div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span class="toast-text"></span>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo">CHRONOS<span>·</span>APEX</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="product.html">Collection</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#newsletter">Contact</a></li>
+      <li>
+        <a href="product.html" class="nav-cta">
+          <i class="fas fa-shopping-bag"></i> Buy Now
+        </a>
+      </li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="home">
+    <canvas id="heroCanvas" class="hero-canvas"></canvas>
+    <div class="hero-particles" id="heroParticles"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content" data-aos="fade-right" data-aos-duration="1200">
+      <div class="hero-badge">
+        <i class="fas fa-circle"></i>
+        Limited Edition — Only 50 Pieces Worldwide
+      </div>
+      <h1 class="hero-title">
+        THE APEX<br>
+        <span class="accent">CHRONOGRAPH</span><br>
+        <span style="font-size:0.55em;font-style:italic;color:var(--silver);">Titanium & Red</span>
+      </h1>
+      <p class="hero-subtitle">Precision Born from Perfection</p>
+      <p class="hero-desc">
+        Forged from grade-5 aerospace titanium, housing a hand-assembled movement
+        with 72-hour power reserve. The red rubber strap — a signature declaration
+        of speed, fire, and uncompromising excellence.
+      </p>
+      <div class="hero-cta">
+        <a href="product.html" class="btn btn-primary">
+          <i class="fas fa-eye"></i> Discover Now
+        </a>
+        <a href="gallery.html" class="btn btn-secondary">
+          <i class="fas fa-images"></i> View Gallery
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-value">72<span>h</span></div>
+          <div class="hero-stat-label">Power Reserve</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">500<span>m</span></div>
+          <div class="hero-stat-label">Water Resistance</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">847<span>+</span></div>
+          <div class="hero-stat-label">Components</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-3d-container">
+      <canvas id="watchCanvas3D" width="600" height="700"></canvas>
+    </div>
+
+    <div class="scroll-indicator">
+      <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="section features" id="features">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Engineered to Perfection</span>
+      <h2 class="section-title">Why <em>Apex</em> Stands Alone</h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Every component is obsessively crafted, from the 847-part movement to the sapphire crystal that crowns it.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card card" data-aos="fade-up" data-aos-delay="0">
+        <div class="feature-icon"><i class="fas fa-atom"></i></div>
+        <h3 class="feature-title">Grade-5 Titanium Case</h3>
+        <p class="feature-text">Three times stronger than steel, yet 45% lighter. Our aerospace-grade titanium case withstands extreme pressures while providing unmatched comfort on the wrist.</p>
+      </div>
+      <div class="feature-card card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon"><i class="fas fa-cog"></i></div>
+        <h3 class="feature-title">In-House Movement</h3>
+        <p class="feature-text">847 meticulously hand-assembled components. Our proprietary CA-8 calibre beats at 36,000 vph delivering precision to ±2 seconds per day — COSC certified.</p>
+      </div>
+      <div class="feature-card card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon"><i class="fas fa-gem"></i></div>
+        <h3 class="feature-title">Sapphire Crystal</h3>
+        <p class="feature-text">Anti-reflective double-dome sapphire crystal rated 9 on the Mohs hardness scale. Virtually scratch-proof with 99.9% light transmission for perfect dial visibility.</p>
+      </div>
+      <div class="feature-card card" data-aos="fade-up" data-aos-delay="300">
+        <div class="feature-icon"><i class="fas fa-water"></i></div>
+        <h3 class="feature-title">500m Water Resistance</h3>
+        <p class="feature-text">Helium escape valve and triple-sealed crown ensure performance to 500 metres depth. Built for professional diving while maintaining couture elegance.</p>
+      </div>
+      <div class="feature-card card" data-aos="fade-up" data-aos-delay="400">
+        <div class="feature-icon"><i class="fas fa-sun"></i></div>
+        <h3 class="feature-title">Superluminova™ Indices</h3>
+        <p class="feature-text">Grade A1 Superluminova coating on all hour markers and hands guarantees 8+ hours of full luminescence in complete darkness — essential for professional use.</p>
+      </div>
+      <div class="feature-card card" data-aos="fade-up" data-aos-delay="500">
+        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3 class="feature-title">Lifetime Certification</h3>
+        <p class="feature-text">Each Apex ships with a numbered Certificate of Authenticity, COSC timing certificate, and lifetime craftsmanship warranty — your investment, protected forever.</p>
+      </div>
+      <div class="feature-card card" data-aos="fade-up" data-aos-delay="600">
+        <div class="feature-icon"><i class="fas fa-ruler-combined"></i></div>
+        <h3 class="feature-title">42mm Diameter</h3>
+        <p class="feature-text">Perfectly proportioned at 42mm diameter and 12.4mm thickness. The brushed and polished finishing involves 23 distinct surface treatments over 6 days.</p>
+      </div>
+      <div class="feature-card card" data-aos="fade-up" data-aos-delay="700">
+        <div class="feature-icon"><i class="fas fa-fire"></i></div>
+        <h3 class="feature-title">Red Rubber Strap</h3>
+        <p class="feature-text">Hypoallergenic vulcanized natural rubber strap with red lacquered titanium deployant clasp. Crafted to endure extreme conditions from arctic cold to equatorial heat.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SPECS MARQUEE ===== -->
+  <div class="specs-strip" data-aos="fade-in">
+    <div class="specs-scroll-track" id="specTrack">
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>CA-8 In-House Calibre</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>847 Components</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>72-Hour Power Reserve</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>Grade-5 Titanium</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>500m Water Resistant</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>Sapphire Crystal</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>COSC Certified</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>Red Rubber Strap</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>Superluminova™ A1</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>36,000 vph</span></div>
+      <!-- duplicate for seamless loop -->
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>CA-8 In-House Calibre</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>847 Components</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>72-Hour Power Reserve</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>Grade-5 Titanium</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>500m Water Resistant</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>Sapphire Crystal</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>COSC Certified</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>Red Rubber Strap</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>Superluminova™ A1</span></div>
+      <div class="spec-pill"><i class="fas fa-circle-dot"></i><span>36,000 vph</span></div>
+    </div>
+  </div>
+
+  <!-- ===== MATERIALS ===== -->
+  <section class="section materials" id="materials">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">The Craft</span>
+      <h2 class="section-title">Materials <em>Without Compromise</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="materials-layout">
+      <div class="materials-watch" data-aos="fade-right">
+        <canvas id="materials-canvas" width="450" height="500"></canvas>
+      </div>
+      <div class="materials-list" data-aos="fade-left">
+        <div class="material-item">
+          <div class="material-icon silver-bg"><i class="fas fa-ring"></i></div>
+          <div>
+            <div class="material-name">Grade-5 Titanium Alloy</div>
+            <div class="material-desc">Ti-6Al-4V aerospace-grade titanium. Density 4.43 g/cm³. Biocompatible, anti-magnetic, corrosion resistant to ISO 12188 standards.</div>
+          </div>
+        </div>
+        <div class="material-item">
+          <div class="material-icon red-bg"><i class="fas fa-circle"></i></div>
+          <div>
+            <div class="material-name">Vulcanized Red Rubber</div>
+            <div class="material-desc">Natural rubber vulcanized at 160°C. Maintains flexibility from −40°C to +100°C. Textured for grip, hypoallergenic, salt-water resistant.</div>
+          </div>
+        </div>
+        <div class="material-item">
+          <div class="material-icon gold-bg"><i class="fas fa-gem"></i></div>
+          <div>
+            <div class="material-name">Anti-Reflective Sapphire</div>
+            <div class="material-desc">Synthetic corundum (Al₂O₃). Mohs hardness 9. Double-dome profile with multilayer AR coating on both surfaces. 99.9% light transmission.</div>
+          </div>
+        </div>
+        <div class="material-item">
+          <div class="material-icon gold-bg"><i class="fas fa-cog"></i></div>
+          <div>
+            <div class="material-name">Hand-Decorated Movement</div>
+            <div class="material-desc">Côtes de Genève finishing on bridges, perlage on mainplate, bevelled & polished edges on every single wheel. 6 days of hand decoration per movement.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRICE PARALLAX ===== -->
+  <div class="parallax-banner" id="priceBanner">
+    <div class="parallax-bg" id="parallaxBg"></div>
+    <div class="parallax-rings">
+      <div class="p-ring"></div>
+      <div class="p-ring"></div>
+      <div class="p-ring"></div>
+      <div class="p-ring"></div>
+    </div>
+    <div class="parallax-content" data-aos="zoom-in">
+      <div class="parallax-price-tag">Starting From</div>
+      <div class="parallax-price">$108,500</div>
+      <div class="parallax-tagline">Including Certificate of Authenticity &amp; Lifetime Warranty</div>
+      <div class="parallax-cta">
+        <a href="product.html" class="btn btn-primary">
+          <i class="fas fa-shopping-bag"></i> Order Yours Today
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HERITAGE TIMELINE ===== -->
+  <section class="section heritage">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">A Century of Excellence</span>
+      <h2 class="section-title">Our <em>Legacy</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item" data-aos="fade-right">
+        <div class="timeline-content">
+          <div class="timeline-year">1924</div>
+          <div class="timeline-event">Founded in Geneva</div>
+          <div class="timeline-desc">Master horologist Jean-Pierre Apex establishes a workshop on Rue du Rhône, Geneva, with a singular vision: to make time feel eternal.</div>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-spacer"></div>
+      </div>
+      <div class="timeline-item" data-aos="fade-left">
+        <div class="timeline-spacer"></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1961</div>
+          <div class="timeline-event">First In-House Calibre</div>
+          <div class="timeline-desc">Launch of the CA-1 movement — the world's first chronograph calibre with a micro-rotor and column wheel, winning the Grand Prix de Genève.</div>
+        </div>
+      </div>
+      <div class="timeline-item" data-aos="fade-right">
+        <div class="timeline-content">
+          <div class="timeline-year">1987</div>
+          <div class="timeline-event">Titanium Pioneer</div>
+          <div class="timeline-desc">Chronos Apex becomes the first manufacture to use aerospace-grade titanium in watchmaking, a decade before it became industry standard.</div>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-spacer"></div>
+      </div>
+      <div class="timeline-item" data-aos="fade-left">
+        <div class="timeline-spacer"></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2024</div>
+          <div class="timeline-event">The Apex Chronograph</div>
+          <div class="timeline-desc">100 years of mastery culminates in our greatest achievement — 50 pieces, each requiring 1,200 hours of hand work, representing the absolute pinnacle of the art.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="section testimonials-strip">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Connoisseurs Speak</span>
+      <h2 class="section-title">Words from <em>Owners</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card card" data-aos="fade-up" data-aos-delay="0">
+        <div class="testimonial-quote">"</div>
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">The Apex Chronograph is not a watch — it's a conversation piece, a heirloom, an obsession. Every glance at my wrist reminds me why perfection costs what it does.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">JH</div>
+          <div>
+            <div class="testimonial-name">James Hartwell</div>
+            <div class="testimonial-role">CEO, Hartwell Capital · New York</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card card" data-aos="fade-up" data-aos-delay="100">
+        <div class="testimonial-quote">"</div>
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">I have 40 timepieces in my collection from the finest names in horology. The Apex sits alone at the top. The movement visible through the caseback is breathtaking art.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">AB</div>
+          <div>
+            <div class="testimonial-name">Alessandro Bianchi</div>
+            <div class="testimonial-role">Watch Collector · Milan</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card card" data-aos="fade-up" data-aos-delay="200">
+        <div class="testimonial-quote">"</div>
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">The red strap is iconic — bold yet refined. I wear it in boardrooms and on yachts alike. Service was impeccable, the team treated me like a VIP from first inquiry to delivery.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SC</div>
+          <div>
+            <div class="testimonial-name">Sophia Chen</div>
+            <div class="testimonial-role">Entrepreneur · Hong Kong</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NEWSLETTER ===== -->
+  <section class="section newsletter" id="newsletter">
+    <div class="newsletter-inner" data-aos="fade-up">
+      <span class="section-tag">Private Access</span>
+      <h2 class="section-title">Join the <em>Inner Circle</em></h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Receive first access to new references, private events, and exclusive collector pieces — reserved for our most discerning clientele.</p>
+      <form class="newsletter-form" id="newsletterForm" novalidate>
+        <input type="email" class="newsletter-input" placeholder="Your email address" id="newsletterEmail" required />
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i> Join
+        </button>
+      </form>
+      <p class="newsletter-disclaimer">
+        By subscribing you agree to our <a href="#">Privacy Policy</a>. We will never share your details.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <!-- Brand -->
+      <div data-aos="fade-up" data-aos-delay="0">
+        <div class="footer-brand-logo">CHRONOS APEX</div>
+        <p class="footer-brand-desc">Since 1924, crafting extraordinary timepieces in Geneva. Each watch is a 100-year legacy of precision, beauty, and uncompromising excellence.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <!-- Navigation -->
+      <div data-aos="fade-up" data-aos-delay="100">
+        <div class="footer-heading">Navigation</div>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="product.html">Collection</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="product.html#specs">Specifications</a></li>
+          <li><a href="product.html#reviews">Reviews</a></li>
+          <li><a href="#heritage">Heritage</a></li>
+        </ul>
+      </div>
+      <!-- Support -->
+      <div data-aos="fade-up" data-aos-delay="200">
+        <div class="footer-heading">Services</div>
+        <ul class="footer-links">
+          <li><a href="#">After-Sales Service</a></li>
+          <li><a href="#">Watch Authentication</a></li>
+          <li><a href="#">Custom Engraving</a></li>
+          <li><a href="#">VIP Concierge</a></li>
+          <li><a href="#">Warranty Registration</a></li>
+          <li><a href="#">Shipping & Returns</a></li>
+        </ul>
+      </div>
+      <!-- Contact -->
+      <div data-aos="fade-up" data-aos-delay="300">
+        <div class="footer-heading">Contact</div>
+        <div class="footer-contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>12 Rue du Rhône, 1204 Geneva, Switzerland</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fas fa-phone"></i>
+          <span>+41 22 000 0000</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fas fa-envelope"></i>
+          <span>concierge@chronosapex.com</span>
+        </div>
+        <div class="footer-heading" style="margin-top:24px;">Newsletter</div>
+        <form class="footer-newsletter-form" id="footerNewsletter">
+          <input type="email" placeholder="Your email" />
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        © 2024 <span>Chronos Apex SA</span>. All rights reserved. Geneva, Switzerland.
+      </div>
+      <div class="footer-payments">
+        <i class="fab fa-cc-visa" title="Visa"></i>
+        <i class="fab fa-cc-mastercard" title="Mastercard"></i>
+        <i class="fab fa-cc-amex" title="Amex"></i>
+        <i class="fab fa-cc-paypal" title="PayPal"></i>
+        <i class="fab fa-bitcoin" title="Crypto"></i>
+      </div>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.min.js"></script>
+
+  <script>
+    'use strict';
+    // ===== LOADER =====
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+        initAnimations();
+      }, 2200);
+    });
+
+    // ===== AOS =====
+    AOS.init({ duration: 900, once: true, offset: 80, easing: 'ease-out-cubic' });
+
+    // ===== CURSOR =====
+    const cursor = document.getElementById('cursor');
+    const follower = document.getElementById('cursor-follower');
+    let mx = 0, my = 0, fx = 0, fy = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    (function animCursor() {
+      fx += (mx - fx) * 0.12; fy += (my - fy) * 0.12;
+      if (cursor) { cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; }
+      if (follower) { follower.style.left = fx + 'px'; follower.style.top = fy + 'px'; }
+      requestAnimationFrame(animCursor);
+    })();
+    document.querySelectorAll('a,button,.card,.feature-card,.material-item').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        if (cursor) { cursor.style.width = '20px'; cursor.style.height = '20px'; }
+        if (follower) { follower.style.width = '60px'; follower.style.height = '60px'; follower.style.opacity = '0.3'; }
+      });
+      el.addEventListener('mouseleave', () => {
+        if (cursor) { cursor.style.width = '12px'; cursor.style.height = '12px'; }
+        if (follower) { follower.style.width = '40px'; follower.style.height = '40px'; follower.style.opacity = '0.6'; }
+      });
+    });
+
+    // ===== SCROLL PROGRESS =====
+    const scrollBar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      if (scrollBar) scrollBar.style.width = pct + '%';
+    });
+
+    // ===== NAVBAR =====
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    // ===== TOAST =====
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.querySelector('.toast-text').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ===== NEWSLETTER =====
+    document.getElementById('newsletterForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      const v = document.getElementById('newsletterEmail').value;
+      if (!v || !v.includes('@')) { showToast('Please enter a valid email address.'); return; }
+      showToast('Welcome to the Inner Circle! Check your inbox.');
+      e.target.reset();
+    });
+    document.getElementById('footerNewsletter')?.addEventListener('submit', e => {
+      e.preventDefault();
+      showToast('Thank you for subscribing!');
+      e.target.reset();
+    });
+
+    // ===== PARALLAX =====
+    window.addEventListener('scroll', () => {
+      const banner = document.getElementById('priceBanner');
+      if (!banner) return;
+      const rect = banner.getBoundingClientRect();
+      const bg = document.getElementById('parallaxBg');
+      if (bg) bg.style.transform = `translateY(${rect.top * 0.3}px)`;
+    });
+
+    // ===== THREE.JS HERO WATCH =====
+    function initHeroWatch() {
+      const canvas = document.getElementById('watchCanvas3D');
+      if (!canvas || !window.THREE) return;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(canvas.offsetWidth || 600, canvas.offsetHeight || 700);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 0.1, 100);
+      camera.position.set(0, 0, 4.5);
+
+      // Lighting
+      const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(ambient);
+      const goldLight = new THREE.PointLight(0xd4af37, 3, 20);
+      goldLight.position.set(3, 3, 3);
+      scene.add(goldLight);
+      const redLight = new THREE.PointLight(0xff4444, 2, 15);
+      redLight.position.set(-3, -2, 2);
+      scene.add(redLight);
+      const rimLight = new THREE.DirectionalLight(0xc0c0c0, 1.5);
+      rimLight.position.set(0, 5, -5);
+      scene.add(rimLight);
+
+      // Watch group
+      const watchGroup = new THREE.Group();
+      scene.add(watchGroup);
+
+      // Case
+      const caseGeo = new THREE.CylinderGeometry(1.1, 1.1, 0.28, 64);
+      const caseMat = new THREE.MeshStandardMaterial({ color: 0x8898a8, metalness: 0.95, roughness: 0.15 });
+      const caseObj = new THREE.Mesh(caseGeo, caseMat);
+      watchGroup.add(caseObj);
+
+      // Bezel ring
+      const bezelGeo = new THREE.TorusGeometry(1.08, 0.09, 12, 64);
+      const bezelMat = new THREE.MeshStandardMaterial({ color: 0x9ab0c0, metalness: 0.97, roughness: 0.1 });
+      const bezel = new THREE.Mesh(bezelGeo, bezelMat);
+      bezel.position.y = 0.14;
+      bezel.rotation.x = Math.PI / 2;
+      watchGroup.add(bezel);
+
+      // Dial
+      const dialGeo = new THREE.CylinderGeometry(1.0, 1.0, 0.04, 64);
+      const dialMat = new THREE.MeshStandardMaterial({ color: 0x04060f, metalness: 0.3, roughness: 0.8 });
+      const dial = new THREE.Mesh(dialGeo, dialMat);
+      dial.position.y = 0.16;
+      watchGroup.add(dial);
+
+      // Indices (hour markers)
+      for (let i = 0; i < 12; i++) {
+        const angle = (i / 12) * Math.PI * 2;
+        const indGeo = new THREE.BoxGeometry(0.06, 0.03, 0.18);
+        const indMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.1, emissive: 0xd4af37, emissiveIntensity: 0.5 });
+        const ind = new THREE.Mesh(indGeo, indMat);
+        ind.position.set(Math.sin(angle) * 0.82, 0.19, Math.cos(angle) * 0.82);
+        watchGroup.add(ind);
+      }
+
+      // Hour hand
+      const hourGeo = new THREE.BoxGeometry(0.045, 0.03, 0.52);
+      const handMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.1 });
+      const hourHand = new THREE.Mesh(hourGeo, handMat);
+      hourHand.position.y = 0.2;
+      hourHand.position.z = -0.1;
+      watchGroup.add(hourHand);
+
+      // Minute hand
+      const minGeo = new THREE.BoxGeometry(0.03, 0.03, 0.72);
+      const minuteHand = new THREE.Mesh(minGeo, handMat);
+      minuteHand.position.y = 0.21;
+      minuteHand.position.z = -0.15;
+      watchGroup.add(minuteHand);
+
+      // Second hand
+      const secGeo = new THREE.BoxGeometry(0.018, 0.03, 0.78);
+      const secMat = new THREE.MeshStandardMaterial({ color: 0xff4444, metalness: 0.8, roughness: 0.2, emissive: 0xff4444, emissiveIntensity: 0.5 });
+      const secHand = new THREE.Mesh(secGeo, secMat);
+      secHand.position.y = 0.22;
+      watchGroup.add(secHand);
+
+      // Crown
+      const crownGeo = new THREE.CylinderGeometry(0.055, 0.055, 0.18, 16);
+      const crownMat = new THREE.MeshStandardMaterial({ color: 0x9ab0c0, metalness: 0.95, roughness: 0.15 });
+      const crown = new THREE.Mesh(crownGeo, crownMat);
+      crown.rotation.z = Math.PI / 2;
+      crown.position.set(1.16, 0, 0);
+      watchGroup.add(crown);
+
+      // Strap top
+      const strapTopGeo = new THREE.BoxGeometry(0.72, 0.12, 1.2);
+      const strapMat = new THREE.MeshStandardMaterial({ color: 0xcc1111, roughness: 0.7, metalness: 0.1 });
+      const strapTop = new THREE.Mesh(strapTopGeo, strapMat);
+      strapTop.position.set(0, -0.02, 1.55);
+      watchGroup.add(strapTop);
+
+      const strapBotGeo = new THREE.BoxGeometry(0.72, 0.12, 1.2);
+      const strapBot = new THREE.Mesh(strapBotGeo, strapMat);
+      strapBot.position.set(0, -0.02, -1.55);
+      watchGroup.add(strapBot);
+
+      // Crystal
+      const crystalGeo = new THREE.CylinderGeometry(1.0, 1.0, 0.05, 64);
+      const crystalMat = new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.12, metalness: 0.0, roughness: 0.0 });
+      const crystal = new THREE.Mesh(crystalGeo, crystalMat);
+      crystal.position.y = 0.2;
+      watchGroup.add(crystal);
+
+      watchGroup.rotation.x = 0.3;
+      watchGroup.rotation.y = 0.5;
+
+      let mouseX = 0, mouseY = 0;
+      document.addEventListener('mousemove', e => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const now = new Date();
+        const secs = now.getSeconds() + now.getMilliseconds() / 1000;
+        const mins = now.getMinutes() + secs / 60;
+        const hours = (now.getHours() % 12) + mins / 60;
+
+        secHand.rotation.y = -(secs / 60) * Math.PI * 2;
+        minuteHand.rotation.y = -(mins / 60) * Math.PI * 2;
+        hourHand.rotation.y = -(hours / 12) * Math.PI * 2;
+
+        watchGroup.rotation.y += (mouseX * 0.5 - watchGroup.rotation.y + 0.5) * 0.04;
+        watchGroup.rotation.x += (-mouseY * 0.3 + 0.3 - watchGroup.rotation.x) * 0.04;
+
+        goldLight.position.x = Math.sin(Date.now() * 0.001) * 4;
+        goldLight.position.z = Math.cos(Date.now() * 0.001) * 4;
+
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+
+    // ===== THREE.JS MATERIALS SECTION =====
+    function initMaterialsWatch() {
+      const canvas = document.getElementById('materials-canvas');
+      if (!canvas || !window.THREE) return;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(canvas.offsetWidth || 450, canvas.offsetHeight || 500);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 0.1, 100);
+      camera.position.set(0, 2, 5);
+      camera.lookAt(0, 0, 0);
+
+      const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(ambient);
+      const mainLight = new THREE.DirectionalLight(0xd4af37, 3);
+      mainLight.position.set(4, 6, 4);
+      scene.add(mainLight);
+      const fillLight = new THREE.PointLight(0xff4444, 2, 20);
+      fillLight.position.set(-4, -2, 3);
+      scene.add(fillLight);
+
+      const watchGroup = new THREE.Group();
+      scene.add(watchGroup);
+
+      // Case
+      const caseGeo = new THREE.CylinderGeometry(1.1, 1.1, 0.28, 64);
+      const caseMat = new THREE.MeshStandardMaterial({ color: 0x8898a8, metalness: 0.95, roughness: 0.12 });
+      watchGroup.add(new THREE.Mesh(caseGeo, caseMat));
+
+      // Dial
+      const dialGeo = new THREE.CylinderGeometry(1.0, 1.0, 0.04, 64);
+      const dialMat = new THREE.MeshStandardMaterial({ color: 0x06080f, metalness: 0.2, roughness: 0.9 });
+      const dial = new THREE.Mesh(dialGeo, dialMat);
+      dial.position.y = 0.16;
+      watchGroup.add(dial);
+
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * Math.PI * 2;
+        const g = new THREE.BoxGeometry(0.06, 0.03, 0.18);
+        const m = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.1, emissive: 0xd4af37, emissiveIntensity: 0.3 });
+        const ind = new THREE.Mesh(g, m);
+        ind.position.set(Math.sin(a) * 0.82, 0.19, Math.cos(a) * 0.82);
+        watchGroup.add(ind);
+      }
+
+      // Straps
+      const sm = new THREE.MeshStandardMaterial({ color: 0xcc1111, roughness: 0.65, metalness: 0.05 });
+      const st = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.12, 1.2), sm);
+      st.position.set(0, -0.02, 1.55); watchGroup.add(st);
+      const sb = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.12, 1.2), sm);
+      sb.position.set(0, -0.02, -1.55); watchGroup.add(sb);
+
+      watchGroup.rotation.x = 0.4;
+      watchGroup.rotation.y = Math.PI / 6;
+
+      function animate() {
+        requestAnimationFrame(animate);
+        watchGroup.rotation.y += 0.008;
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+
+    // ===== HERO PARTICLE CANVAS =====
+    function initParticles() {
+      const c = document.getElementById('heroParticles');
+      if (!c) return;
+      const canvas = document.createElement('canvas');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.cssText = 'position:absolute;inset:0;pointer-events:none';
+      c.appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      const particles = Array.from({ length: 80 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.5 + 0.3,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        a: Math.random()
+      }));
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0) p.x = canvas.width;
+          if (p.x > canvas.width) p.x = 0;
+          if (p.y < 0) p.y = canvas.height;
+          if (p.y > canvas.height) p.y = 0;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(212,175,55,${p.a * 0.6})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    function initAnimations() {
+      initHeroWatch();
+      initMaterialsWatch();
+      initParticles();
+      if (window.gsap) {
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from('.hero-content', { opacity: 0, y: 60, duration: 1.2, ease: 'power3.out', delay: 0.3 });
+        gsap.from('.hero-stats > div', { opacity: 0, y: 30, stagger: 0.15, duration: 1, ease: 'power2.out', delay: 0.8 });
+      }
+    }
+  </script>
+</body>
+</html>
